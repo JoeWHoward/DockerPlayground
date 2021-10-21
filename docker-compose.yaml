@@ -1,0 +1,22 @@
+version: "1"
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: vagrant
+      POSTGRES_DB: appdb
+      POSTGRES_PASSWORD: vagrant!
+    volumes:
+      - pgdata:/var/lib/posgresql/data
+  src:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/src
+    command: uvicorn main:app --reload --host 0.0.0.0
+    depends_on:
+      - db
+volumes:
+  pgdata:
